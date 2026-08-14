@@ -39,7 +39,7 @@ export default function UserDetailScreen({ route, navigation }: Props) {
     queryKey: ['user', userId],
     queryFn: () => fetchUserById(userId),
     placeholderData: () => {
-      const feedData: any = queryClient.getQueryData(['photos', 10]);
+      const feedData: any = queryClient.getQueryData(['photos', 15]);
       const allUsers = feedData?.pages.flatMap((page: any) => page.users) || [];
       return allUsers.find((u: any) => u.id === userId);
     },
