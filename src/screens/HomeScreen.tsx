@@ -7,6 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { fetchPhotos, updateUserGender } from '../api/api';
+import { queryKeys } from '../api/queryKeys';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { horizontalScale, verticalScale, moderateScale } from '../utils/utils';
 import { colors } from '../assets/colors';
@@ -58,7 +59,7 @@ export default function HomeScreen({ navigation }: Props) {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['photos', limit],
+    queryKey: queryKeys.photos(limit),
     queryFn: ({ pageParam = 0 }) => fetchPhotos(limit, pageParam as number),
     initialPageParam: 0,
     getNextPageParam: lastPage => {
@@ -78,7 +79,7 @@ export default function HomeScreen({ navigation }: Props) {
       newGender: 'male' | 'female';
     }) => updateUserGender(userId, newGender),
     onMutate: async ({ userId, newGender }) => {
-      const queryKey = ['photos', limit];
+      const queryKey = queryKeys.photos(limit);
       await queryClient.cancelQueries({ queryKey });
 
       const previousData = queryClient.getQueryData(queryKey);
@@ -104,7 +105,7 @@ export default function HomeScreen({ navigation }: Props) {
     onError: (err, vars, context) => {
       console.error('Failed to toggle gender:', err);
       if (context?.previousData) {
-        queryClient.setQueryData(['photos', limit], context.previousData);
+        queryClient.setQueryData(queryKeys.photos(limit), context.previousData);
       }
     },
   });
@@ -116,7 +117,7 @@ export default function HomeScreen({ navigation }: Props) {
     }
   };
 
-  useRefreshOnFocus(['photos', limit]);
+  useRefreshOnFocus(queryKeys.photos(limit));
 
   if (isLoading) {
     return <SkeletonLoader />;

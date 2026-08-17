@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, QueryKey } from '@tanstack/react-query';
 
-export function useRefreshOnFocus(queryKey?: any[]) {
+export function useRefreshOnFocus(queryKey?: QueryKey) {
   const queryClient = useQueryClient();
   const firstTimeRef = React.useRef(true);
 

@@ -27,6 +27,7 @@ import { horizontalScale, verticalScale, moderateScale } from '../utils/utils';
 import { colors } from '../assets/colors';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchUserById } from '../api/api';
+import { queryKeys } from '../api/queryKeys';
 import Loader from '../components/Loader';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'UserDetail'>;
@@ -36,10 +37,10 @@ export default function UserDetailScreen({ route, navigation }: Props) {
   const queryClient = useQueryClient();
 
   const { data: user, isLoading } = useQuery({
-    queryKey: ['user', userId],
+    queryKey: queryKeys.user(userId),
     queryFn: () => fetchUserById(userId),
     placeholderData: () => {
-      const feedData: any = queryClient.getQueryData(['photos', 15]);
+      const feedData: any = queryClient.getQueryData(queryKeys.photos(15));
       const allUsers = feedData?.pages.flatMap((page: any) => page.users) || [];
       return allUsers.find((u: any) => u.id === userId);
     },
