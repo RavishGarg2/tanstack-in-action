@@ -1,9 +1,24 @@
 import React from 'react';
 import { StatusBar, AppState, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { QueryClient, QueryClientProvider, onlineManager, focusManager } from '@tanstack/react-query';
+import { QueryClient, onlineManager, focusManager } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { createMMKV } from 'react-native-mmkv';
 import NetInfo from '@react-native-community/netinfo';
 import RootNavigation from './src/navigation/NavigationContainer';
+
+const storage = createMMKV();
+
+const clientPersister = createAsyncStoragePersister({
+  storage: {
+    getItem: (key: string) => storage.getString(key) ?? null,
+    setItem: (key: string, value: string) => storage.set(key, value),
+    removeItem: (key: string) => {
+      storage.remove(key);
+    },
+  },
+});
 
 // Auto pause/resume queries based on network connectivity
 onlineManager.setEventListener((setOnline) => {
@@ -20,16 +35,27 @@ focusManager.setEventListener((handleFocus) => {
   return () => subscription.remove();
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours cache retention in MMKV
+      staleTime: 0, // Mark cache as stale so API refetches background data
+      refetchOnMount: 'always', // Always revalidate from server when screen loads
+    },
+  },
+});
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister: clientPersister }}
+    >
       <SafeAreaProvider>
         <StatusBar hidden={true} />
         <RootNavigation />
       </SafeAreaProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }
 
