@@ -14,10 +14,8 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'VisionCamera' do
+target 'TanStackBlueprint' do
   config = use_native_modules!
-
-  pod 'SDWebImage', :modular_headers => true
 
   use_react_native!(
     :path => config[:reactNativePath],

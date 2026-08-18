@@ -1,4 +1,4 @@
-package com.visioncamera
+package com.tanstackblueprint
 
 import android.app.Application
 import com.facebook.react.PackageList

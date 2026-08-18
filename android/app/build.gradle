@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.visioncamera"
+    namespace "com.tanstackblueprint"
     defaultConfig {
-        applicationId "com.visioncamera"
+        applicationId "com.tanstackblueprint"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
