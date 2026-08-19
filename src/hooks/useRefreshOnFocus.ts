@@ -18,6 +18,6 @@ export function useRefreshOnFocus(queryKey?: QueryKey) {
         stale: true,
         type: 'active',
       });
-    }, [queryClient]),
+    }, [queryClient, queryKey]),
   );
 }

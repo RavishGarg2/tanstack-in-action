@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FetchPhotosResponse, User } from './types';
+import { FetchPhotosResponse, SearchProductsResponse, User, Product } from './types';
 
 const apiClient = axios.create({
   baseURL: 'https://dummyjson.com',
@@ -31,4 +31,27 @@ const fetchUserById = async (userId: number): Promise<User> => {
   return response.data;
 };
 
-export { apiClient, fetchPhotos, updateUserGender, fetchUserById };
+const fetchProductById = async (productId: number): Promise<Product> => {
+  const response = await apiClient.get<Product>(`/products/${productId}`);
+  return response.data;
+};
+
+const searchProducts = async (
+  query: string,
+  limit: number = 20,
+  skip: number = 0,
+): Promise<SearchProductsResponse> => {
+  const response = await apiClient.get<SearchProductsResponse>(
+    `/products/search?q=${encodeURIComponent(query)}&limit=${limit}&skip=${skip}`,
+  );
+  return response.data;
+};
+
+export {
+  apiClient,
+  fetchPhotos,
+  updateUserGender,
+  fetchUserById,
+  fetchProductById,
+  searchProducts,
+};

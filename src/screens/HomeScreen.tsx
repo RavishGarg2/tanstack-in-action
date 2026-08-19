@@ -19,7 +19,7 @@ import { useRefreshOnFocus } from '../hooks/useRefreshOnFocus';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/NavigationContainer';
 import { HugeiconsIcon } from '@hugeicons/react-native';
-import { ArrowUp01Icon } from '@hugeicons/core-free-icons';
+import { ArrowUp01Icon, Search01Icon } from '@hugeicons/core-free-icons';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -136,10 +136,23 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>User Directory</Text>
-        <Text style={styles.headerSubtitle}>
-          Discover and connect with people
-        </Text>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerTitle}>User Directory</Text>
+          <Text style={styles.headerSubtitle}>
+            Discover and connect with people
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.searchIconButton}
+          onPress={() => navigation.navigate('ProductSearch')}
+          activeOpacity={0.7}
+        >
+          <HugeiconsIcon
+            icon={Search01Icon}
+            size={moderateScale(20)}
+            color={colors.snapchatYellow}
+          />
+        </TouchableOpacity>
       </View>
 
       <LegendList
@@ -220,10 +233,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(20),
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: horizontalScale(20),
     paddingVertical: verticalScale(16),
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
+  },
+  headerTextContainer: {
+    flex: 1,
+  },
+  searchIconButton: {
+    width: moderateScale(42),
+    height: moderateScale(42),
+    borderRadius: moderateScale(21),
+    backgroundColor: colors.yellowTransparent12,
+    borderWidth: 1,
+    borderColor: colors.yellowTransparent40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: horizontalScale(12),
   },
   headerTitle: {
     color: colors.white,
